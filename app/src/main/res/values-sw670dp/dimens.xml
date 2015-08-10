@@ -1,0 +1,38 @@
+<resources>
+
+    <!--
+         Customize dimensions originally defined in res/values/dimens.xml (such as
+         screen margins) for sw600dp devices (e.g. 9" tablets) here.
+    -->
+    <dimen name="toolbar_height_extended">300dp</dimen>
+    <dimen name="toolbar_margin">72dp</dimen>
+    <dimen name="frame_horizontal_margin">130dp</dimen>
+
+    <dimen name="card_end">2dp</dimen>
+
+    <dimen name="slidingmenu_offset">300dp</dimen>
+    <dimen name="shadow_width">30dp</dimen>
+
+    <dimen name="padding_tiny">7dp</dimen>
+    <dimen name="padding_small">10dp</dimen>
+    <dimen name="padding_medium">15dp</dimen>
+    <dimen name="padding_large">20dp</dimen>
+    <dimen name="padding_xlarge">30dp</dimen>
+
+    <dimen name="notification_padding">0dp</dimen>
+
+    <dimen name="logo_width">80dp</dimen>
+    <dimen name="logo_height">50dp</dimen>
+
+    <dimen name="line_large">4dp</dimen>
+
+    <dimen name="action_height">175dp</dimen>
+    <dimen name="action_margin">70dp</dimen>
+
+    <dimen name="circle_padding_large">27dp</dimen>
+    <dimen name="circle_padding_medium">15dp</dimen>
+    <dimen name="circle_margin_left">10dp</dimen>
+
+    <dimen name="drawer_logo_margin">45dp</dimen>
+
+</resources>

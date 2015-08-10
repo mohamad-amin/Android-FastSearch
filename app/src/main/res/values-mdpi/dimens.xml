@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <dimen name="slidingmenu_offset">200dp</dimen>
+    <dimen name="shadow_width">15dp</dimen>
+    
+    <dimen name="padding_tiny">3dp</dimen>
+    <dimen name="padding_small">5dp</dimen>
+    <dimen name="padding_medium">8dp</dimen>
+    <dimen name="padding_large">11dp</dimen>
+    <dimen name="padding_xlarge">13dp</dimen>
+    
+    <dimen name="notification_padding">0dp</dimen>
+    
+    <dimen name="logo_width">65dp</dimen>
+    <dimen name="logo_height">33dp</dimen>
+    
+    <dimen name="line_large">4dp</dimen>
+    
+    <dimen name="action_height">115dp</dimen>
+    <dimen name="action_margin">40dp</dimen>
+    
+    <dimen name="circle_padding_large">17dp</dimen>
+    <dimen name="circle_padding_medium">5dp</dimen>
+    <dimen name="circle_margin_left">0dp</dimen>
+    
+    <dimen name="drawer_logo_margin">25dp</dimen>
+    
+</resources>

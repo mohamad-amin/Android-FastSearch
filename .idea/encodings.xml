@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/app/libs/ExceptionHandler.jar" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/libs/adad-2.9.jar" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/libs/picasso-2.5.2.jar" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/activities/MainActivity.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/adapters/ApplicationAdapter.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/adapters/ContactAdapter.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/adapters/FileAdapter.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/adapters/HomeAdapter.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/adapters/RecyclerItemViewHolder.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/databases/ApplicationsDB.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/databases/DirectoriesDB.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/databases/FilesDB.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/fragments/HomeFragment.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/fragments/SearchFragment.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/modules/CustomApplication.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/modules/CustomContact.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/modules/CustomFile.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/modules/CustomFileObserver.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/modules/CustomImageView.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/modules/RecursiveFileObserver.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/modules/SlidingTabLayout.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/modules/SlidingTabStrip.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/receivers/BootReceiver.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/receivers/PackageInstallReceiver.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/receivers/PackageUninstallReceiver.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/utils/BitmapUtils.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/utils/BusinessUtils.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/utils/ContactUtils.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/utils/DisplayUtils.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/utils/FileUtils.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/utils/Interfaces.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/utils/NotificationUtils.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/utils/PicassoUtils.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/utils/RunUtils.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/mohamadamin/fastsearch/free/utils/SdkUtils.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>

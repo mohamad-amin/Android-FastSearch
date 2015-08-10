@@ -1,0 +1,38 @@
+<resources>
+
+    <string name="app_name">Fast Search</string>
+    <string name="cancel">Cancel</string>
+    <string name="search">Search</string>
+    <string name="no_phone">No phone number</string>
+    <string name="nothing_found">Nothing Found!</string>
+    <string name="search_first">Search something...</string>
+    <string name="files">Files</string>
+    <string name="applications">Applications</string>
+    <string name="contacts">Contacts</string>
+
+    <string name="instagram_page">Instagram Page</string>
+    <string name="communication_contact_us">Email Us</string>
+    <string name="communication_contact_us_description">Sending Email To Developer</string>
+    <string name="communication_send_email">Sending Email</string>
+    <string name="communication_send_mail_no_application">No application available for this action!</string>
+
+    <string name="refresh_databases">Update Data</string>
+    <string name="refresh_databases_description">With updating data all the files on SD Card and internal storage checked again and all the files will be resubmitted to application\'s database so that your newly-created files will be shown in your search results.</string>
+    <string name="submit_data_title">Submit Data</string>
+    <string name="submit_data_description">The application is now submitting your files in its local database to make searching the faster. This process may last a few minutes. Please during this period don\'t exit the Fast Search (or at least don\'t kill it) and wait. Otherwise the application may missperform! It\'s clear that the more the files are on your device the more the this process takes time. Thanks for your patience.</string>
+    <string name="submit_data_notification">Submitting Data...</string>
+    <string name="please_wait">Please Wait</string>
+    <string name="refresh">Refresh</string>
+
+    <string name="delete">Delete</string>
+    <string name="rename">Rename</string>
+    <string name="deleted">Deleted!</string>
+    <string name="undo_delete">Undo</string>
+    <string name="submit">OK</string>
+    <string name="enter_new_name">Please enter the new name</string>
+
+    <string name="open_folder">Open Folder</string>
+    <string name="no_app_to_perform_action">No application available to open this file!</string>
+    <string name="error_opening_application">Error in opening! Is this app runnable?</string>
+
+</resources>

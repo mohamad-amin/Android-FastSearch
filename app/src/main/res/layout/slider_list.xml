@@ -1,0 +1,101 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@color/primary_material_light"
+    android:gravity="start"
+    android:layout_gravity="start" >
+
+    <LinearLayout
+        android:background="@color/colorPrimary"
+        android:id="@+id/slider_list_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="@dimen/abc_dialog_padding_material"
+        android:paddingLeft="@dimen/abc_dialog_padding_material"
+        android:paddingBottom="@dimen/padding_large"
+        android:paddingTop="@dimen/padding_large"
+        android:layout_marginBottom="@dimen/padding_medium" >
+        <ImageView
+            android:id="@+id/slider_list_icon"
+            android:layout_width="@dimen/abc_action_bar_stacked_tab_max_width"
+            android:layout_height="@dimen/abc_action_bar_stacked_tab_max_width"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/icon" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/slider_list_bar">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/slider_refresh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textColor="@color/primary_text_default_material_light"
+                android:drawablePadding="@dimen/padding_xlarge"
+                android:textSize="@dimen/abc_text_size_subhead_material"
+                android:drawableRight="@drawable/ic_action_refresh"
+                android:text="@string/refresh_databases"
+                android:paddingLeft="@dimen/padding_large"
+                android:paddingRight="@dimen/padding_large"
+                android:paddingTop="@dimen/padding_small"
+                android:paddingBottom="@dimen/padding_small"
+                android:background="?selectableItemBackground" />
+
+            <LinearLayout
+                android:id="@+id/slider_seperate"
+                android:layout_marginTop="@dimen/padding_medium"
+                android:layout_marginBottom="@dimen/padding_medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#BBB"
+                android:paddingRight="@dimen/abc_dialog_padding_material"
+                android:paddingLeft="@dimen/abc_dialog_padding_material">
+                <View
+                    android:layout_width="@dimen/abc_action_bar_stacked_tab_max_width"
+                    android:layout_height="0.5dp"
+                    android:background="#AAA" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/slider_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/communication_contact_us"
+                android:gravity="center_vertical"
+                android:textColor="@color/primary_text_default_material_light"
+                android:drawableRight="@drawable/ic_action_communication_email"
+                android:drawablePadding="@dimen/abc_dialog_padding_material"
+                android:textSize="@dimen/abc_text_size_subhead_material"
+                android:paddingLeft="@dimen/padding_large"
+                android:paddingRight="@dimen/padding_large"
+                android:paddingTop="@dimen/padding_small"
+                android:paddingBottom="@dimen/padding_small"
+                android:background="?selectableItemBackground" />
+
+            <TextView
+                android:id="@+id/slider_instagram"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/instagram_page"
+                android:gravity="center_vertical"
+                android:textColor="@color/primary_text_default_material_light"
+                android:drawableRight="@drawable/ic_action_instagram"
+                android:drawablePadding="@dimen/abc_dialog_padding_material"
+                android:textSize="@dimen/abc_text_size_subhead_material"
+                android:paddingLeft="@dimen/padding_large"
+                android:paddingRight="@dimen/padding_large"
+                android:paddingTop="@dimen/padding_small"
+                android:paddingBottom="@dimen/padding_small"
+                android:background="?selectableItemBackground" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/action_mode_rename"
+        android:title="@string/rename"
+        android:icon="@drawable/ic_action_create"
+        app:showAsAction="ifRoom|withText"
+        android:showAsAction="ifRoom|withText"
+        tools:ignore="AppCompatResource"/>
+    <item
+        android:id="@+id/action_mode_delete"
+        android:title="@string/delete"
+        android:icon="@drawable/ic_action_delete"
+        app:showAsAction="ifRoom|withText"
+        android:showAsAction="ifRoom|withText"
+        tools:ignore="AppCompatResource"/>
+</menu>

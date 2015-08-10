@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="toolbar_height_extended">190dp</dimen>
+    <dimen name="toolbar_margin">64dp</dimen>
+    <dimen name="frame_horizontal_margin">35dp</dimen>
+    <dimen name="fab_size">56dp</dimen>
+    
+    <dimen name="slidingmenu_offset">200dp</dimen>
+    <dimen name="shadow_width">20dp</dimen>
+    
+    <dimen name="padding_tiny">5dp</dimen>
+    <dimen name="padding_small">7dp</dimen>
+    <dimen name="padding_medium">11dp</dimen>
+    <dimen name="padding_large">15dp</dimen>
+    <dimen name="padding_xlarge">20dp</dimen>
+    
+    <dimen name="notification_padding">0dp</dimen>
+    
+    <dimen name="logo_width">70dp</dimen>
+    <dimen name="logo_height">35dp</dimen>
+    
+    <dimen name="line_large">4dp</dimen>
+    
+    <dimen name="action_height">135dp</dimen>
+    <dimen name="action_margin">45dp</dimen>
+    
+    <dimen name="circle_padding_large">17dp</dimen>
+    <dimen name="circle_padding_medium">5dp</dimen>
+    <dimen name="circle_margin_left">0dp</dimen>
+    
+    <dimen name="drawer_logo_margin">35dp</dimen>
+    
+</resources>

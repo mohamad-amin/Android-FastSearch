@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="frame_horizontal_margin">220dp</dimen>
+
+</resources>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minHeight="?attr/actionBarSize"
+    android:background="@color/colorPrimary"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/padding_small"
+    android:paddingBottom="2dp"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    app:contentInsetEnd="@dimen/padding_small"
+    app:contentInsetStart="@dimen/padding_small">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="1dp"
+        app:cardBackgroundColor="@android:color/white">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/padding_small"
+            android:paddingBottom="@dimen/padding_small" >
+
+            <ImageButton
+                android:id="@+id/toolbar_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/padding_medium"
+                android:paddingRight="@dimen/padding_medium"
+                android:background="?selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_action_navigation"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/app_name" />
+
+            <ImageButton
+                android:id="@+id/toolbar_overflow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_action_overflow"
+                android:background="?selectableItemBackgroundBorderless"
+                android:paddingRight="@dimen/padding_medium"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/app_name" />
+
+            <ImageButton
+                android:id="@+id/toolbar_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_action_search"
+                android:background="?selectableItemBackgroundBorderless"
+                android:layout_toLeftOf="@id/toolbar_overflow"
+                android:paddingLeft="@dimen/padding_small"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/app_name" />
+
+            <EditText
+                android:id="@+id/toolbar_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_large"
+                android:hint="@string/search"
+                android:background="@null"
+                android:layout_toLeftOf="@id/toolbar_search"
+                android:layout_toRightOf="@id/toolbar_action"
+                android:layout_centerVertical="true"
+                android:imeOptions="actionSearch"
+                android:inputType="text"  />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</android.support.v7.widget.Toolbar>

@@ -1,0 +1,11 @@
+<resources>
+
+    <dimen name="toolbar_height_extended">190dp</dimen>
+    <dimen name="toolbar_margin">64dp</dimen>
+    <dimen name="frame_horizontal_margin">35dp</dimen>
+
+    <dimen name="card_end">1.5dp</dimen>
+    <dimen name="button_elevation">2dp</dimen>
+    <dimen name="button_press_elevation">4dp</dimen>
+
+</resources>

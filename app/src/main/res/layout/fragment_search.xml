@@ -11,8 +11,7 @@
         app:cardCornerRadius="3dp"
         app:cardElevation="5dp"
         android:padding="@dimen/padding_small"
-        android:layout_margin="@dimen/padding_small"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_margin="@dimen/padding_small">
 
         <RelativeLayout
             android:layout_width="match_parent"

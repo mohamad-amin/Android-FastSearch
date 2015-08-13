@@ -100,8 +100,10 @@ public class HomeFragment extends Fragment implements
 
 
     private void applyFilter(String filter) {
+        int currentPosition = viewPager.getCurrentItem();
         homeAdapter = new HomeAdapter(getChildFragmentManager(), filter, getResources());
         viewPager.setAdapter(homeAdapter);
+        viewPager.setCurrentItem(currentPosition, true);
     }
 
     private boolean onOptionsItemSelected(int menuId) {

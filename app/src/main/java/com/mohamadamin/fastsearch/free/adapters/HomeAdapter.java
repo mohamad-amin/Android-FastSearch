@@ -11,7 +11,7 @@ import com.mohamadamin.fastsearch.free.fragments.SearchFragment;
 public class HomeAdapter extends FragmentStatePagerAdapter {
 
     private final String[] titles;
-    SearchFragment[] searchFragments = new SearchFragment[3];
+    SearchFragment[] searchFragments;
     String filter;
 
     public HomeAdapter(FragmentManager fragmentManager, String filter, Resources resources) {
@@ -20,8 +20,10 @@ public class HomeAdapter extends FragmentStatePagerAdapter {
         this.titles = new String[] {
                 resources.getString(R.string.files),
                 resources.getString(R.string.applications),
-                resources.getString(R.string.contacts)
+                resources.getString(R.string.contacts),
+                resources.getString(R.string.musics)
         };
+        this.searchFragments = new SearchFragment[titles.length];
         for (int i=0; i<searchFragments.length; i++) {
             searchFragments[i] = SearchFragment.newInstance(i, filter);
         }

@@ -16,6 +16,8 @@ import java.util.List;
 public class ApplicationsDB extends SQLiteOpenHelper {
 
 	PackageManager packageManager;
+	SQLiteDatabase db;
+
 	final static int DATABASE_VERSION = 10;
 	final static String DATABASE_NAME = "Applications.db",
 			TABLE_NAME = "AllApps",
@@ -51,25 +53,23 @@ public class ApplicationsDB extends SQLiteOpenHelper {
 	}
 
 	public void addApplication(ApplicationInfo applicationInfo) {
-		SQLiteDatabase db = this.getWritableDatabase();
+		if (db == null) db = getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_NAME, applicationInfo.loadLabel(packageManager).toString());
 		values.put(COLUMN_PACKAGE, applicationInfo.packageName);
 		db.insert(TABLE_NAME, null, values);
-		db.close();
 	}
 
 	public void deleteRecords() {
-		SQLiteDatabase db = this.getWritableDatabase();
+		if (db == null) db = getWritableDatabase();
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
 		onCreate(db);
-		close();
 	}
 
 	public List<CustomApplication> filterApplications(String filter) {
 
+		if (db == null) db = getWritableDatabase();
 		List<CustomApplication> customApplications = new ArrayList<>();
-		SQLiteDatabase db = this.getReadableDatabase();
 		CustomApplication customApplication;
 
 		String query = "SELECT * FROM " + TABLE_NAME + " WHERE " +
@@ -87,25 +87,13 @@ public class ApplicationsDB extends SQLiteOpenHelper {
 		}
 
 		cursor.close();
-		db.close();
-
 		return customApplications;
 
 	}
 
-	public int getCount() {
-		SQLiteDatabase db = this.getWritableDatabase();
-		Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
-		int count = cursor.getCount();
-		cursor.close();
-		if (db.isOpen()) db.close();
-		return count;
-	}
-
 	public void removeApplication(String packageName) {
-		SQLiteDatabase db = this.getWritableDatabase();
+		if (db == null) db = getWritableDatabase();
 		db.delete(TABLE_NAME, COLUMN_PACKAGE + " = ?", new String[]{packageName});
-		if (db.isOpen()) db.close();
 	}
 
 }

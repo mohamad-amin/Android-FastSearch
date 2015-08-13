@@ -94,7 +94,7 @@ public class FileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         holder.getParent().setTag(position);
         holder.getParent().setOnClickListener(this);
         holder.getParent().setOnLongClickListener(this);
-        holder.getParent().setSelected(selectedItems.get(position, false));
+        holder.getParent().setActivated(selectedItems.get(position, false));
 
         String extension = FileUtils.getExtensionFromFilePath(customFile.fullPath);
         String mimeType = FileUtils.getMimeTypeFromFilePath(customFile.fullPath).split("/")[0];

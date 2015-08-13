@@ -14,6 +14,8 @@ import java.util.List;
 
 public class DirectoriesDB extends SQLiteOpenHelper {
 
+	SQLiteDatabase db;
+
 	final static int DATABASE_VERSION = 10;
 	final static String DATABASE_NAME = "Directories.db",
 			 			TABLE_NAME = "AllDirectories",
@@ -53,25 +55,24 @@ public class DirectoriesDB extends SQLiteOpenHelper {
 	}
 
 	public void deleteRecords() {
-		SQLiteDatabase db = this.getWritableDatabase();
+		if (db == null) db = this.getWritableDatabase();
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
 		onCreate(db);
-		close();
 	}
 
 	public void addFile(File file) {
-		SQLiteDatabase db = this.getWritableDatabase();
+		if (db == null) db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_NAME, file.getName());
 		values.put(COLUMN_PATH, file.getParent());
 		values.put(COLUMN_FULL_PATH, file.getAbsolutePath());
 		db.insert(TABLE_NAME, null, values);
-		db.close();
 	}
 	
 	public List<CustomFile> getFiles(String name) {
 
-		SQLiteDatabase db = this.getWritableDatabase();
+		if (db == null) db = this.getWritableDatabase();
+
 		List<CustomFile> customFiles = new ArrayList<>();
 		CustomFile customFile;
 		String query = "SELECT * FROM " + TABLE_NAME + " WHERE " +
@@ -92,31 +93,27 @@ public class DirectoriesDB extends SQLiteOpenHelper {
 		}
 
 		cursor.close();
-		db.close();
-
 		return customFiles;
 		
 	}
 	
 	public void updateFile(CustomFile customFile) {
-		SQLiteDatabase db = this.getWritableDatabase();
+		if (db == null) db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_NAME, customFile.name);
 		values.put(COLUMN_PATH, customFile.directory);
 		values.put(COLUMN_FULL_PATH, customFile.fullPath);
 		db.update(TABLE_NAME, values, COLUMN_ID + " = ?", new String[]{String.valueOf(customFile.id)});
-		if (db.isOpen()) db.close();
 	}
 
 	public boolean deleteFile(String fullPath) {
-		SQLiteDatabase db = this.getWritableDatabase();
+		if (db == null) db = this.getWritableDatabase();
 		int result = db.delete(TABLE_NAME, COLUMN_FULL_PATH + " = ?", new String[]{fullPath});
-		if (db.isOpen()) db.close();
 		return (result > 0);
 	}
 	
 	public void deleteFilesFromDirectory(String fullPath) {
-		SQLiteDatabase db = this.getWritableDatabase();
+		if (db == null) db = this.getWritableDatabase();
 		String query = "SELECT * FROM " + TABLE_NAME + " WHERE " +
 				COLUMN_PATH + " LIKE '%" + fullPath+"/" + "%'";
 		Cursor cursor = db.rawQuery(query, null);
@@ -127,7 +124,6 @@ public class DirectoriesDB extends SQLiteOpenHelper {
 			}
 		}
 		cursor.close();
-		db.close();
 	}
 
 }

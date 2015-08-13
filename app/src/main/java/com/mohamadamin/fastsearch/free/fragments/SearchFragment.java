@@ -1,6 +1,7 @@
 package com.mohamadamin.fastsearch.free.fragments;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,12 +23,14 @@ import com.mohamadamin.fastsearch.free.activities.MainActivity;
 import com.mohamadamin.fastsearch.free.adapters.ApplicationAdapter;
 import com.mohamadamin.fastsearch.free.adapters.ContactAdapter;
 import com.mohamadamin.fastsearch.free.adapters.FileAdapter;
+import com.mohamadamin.fastsearch.free.adapters.MusicAdapter;
 import com.mohamadamin.fastsearch.free.databases.ApplicationsDB;
 import com.mohamadamin.fastsearch.free.databases.DirectoriesDB;
 import com.mohamadamin.fastsearch.free.databases.FilesDB;
 import com.mohamadamin.fastsearch.free.modules.CustomFile;
 import com.mohamadamin.fastsearch.free.utils.ContactUtils;
 import com.mohamadamin.fastsearch.free.utils.Interfaces;
+import com.mohamadamin.fastsearch.free.utils.MusicUtils;
 import com.mohamadamin.fastsearch.free.utils.SdkUtils;
 
 import java.util.Collections;
@@ -96,12 +99,12 @@ public class SearchFragment extends Fragment implements Interfaces.OnFilePressed
         searchFirstLayout = (LinearLayout) mainLayout.findViewById(R.id.search_search_first);
 
         searchResultList = (RecyclerView) mainLayout.findViewById(R.id.search_list);
+        searchResultList.setLayoutManager(new LinearLayoutManager(getActivity()));
         searchResultList.setItemAnimator(new LandingAnimator());
         searchResultList.getItemAnimator().setAddDuration(300);
         searchResultList.getItemAnimator().setRemoveDuration(300);
-        fastScroller = (VerticalRecyclerViewFastScroller) mainLayout.findViewById(R.id.search_fast_scroller);
 
-        searchResultList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        fastScroller = (VerticalRecyclerViewFastScroller) mainLayout.findViewById(R.id.search_fast_scroller);
         fastScroller.setRecyclerView(searchResultList);
         searchResultList.addOnScrollListener(fastScroller.getOnScrollListener());
 
@@ -134,6 +137,7 @@ public class SearchFragment extends Fragment implements Interfaces.OnFilePressed
                         case 0 : searchFiles(); break;
                         case 1 : searchApplications(); break;
                         case 2 : searchContacts(); break;
+                        case 3 : searchMusics(); break;
                         default: break;
                     }
                     return null;
@@ -141,10 +145,11 @@ public class SearchFragment extends Fragment implements Interfaces.OnFilePressed
 
                 @Override
                 protected void onPostExecute(Void aVoid) {
+                    closeDatabases();
                     if (getActivity() == null) return;
                     else if (getActivity().isFinishing()) return;
                     dismissProgressDialog();
-                    if (baseAdapter.getItemCount() > 0) {
+                    if (baseAdapter != null && baseAdapter.getItemCount() > 0) {
                         cardView.setVisibility(View.VISIBLE);
                         nothingFoundLayout.setVisibility(View.GONE);
                         searchResultList.setAdapter(baseAdapter);
@@ -163,23 +168,41 @@ public class SearchFragment extends Fragment implements Interfaces.OnFilePressed
 
     }
 
+    private void closeDatabases() {
+        filesDB.close();
+        directoriesDB.close();
+        applicationsDB.close();
+    }
+
     private void dismissProgressDialog() {
         if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
     }
 
     private void searchFiles() {
+        Context context = getActivity();
+        if (context == null) return;
         List<CustomFile> customFiles = directoriesDB.getFiles(filter);
         customFiles.addAll(filesDB.getFiles(filter));
         Collections.shuffle(customFiles, new Random(System.nanoTime()));
-        baseAdapter = new FileAdapter(getActivity(), mainLayout, customFiles, filter, this);
+        baseAdapter = new FileAdapter(context, mainLayout, customFiles, filter, this);
     }
 
     private void searchApplications() {
-        baseAdapter = new ApplicationAdapter(getActivity(), applicationsDB.filterApplications(filter), filter);
+        Context context = getActivity();
+        if (context == null) return;
+        baseAdapter = new ApplicationAdapter(context, applicationsDB.filterApplications(filter), filter);
     }
 
     private void searchContacts() {
-        baseAdapter = new ContactAdapter(getActivity(), ContactUtils.filterContacts(getActivity(), filter), filter);
+        Context context = getActivity();
+        if (context == null) return;
+        baseAdapter = new ContactAdapter(context, ContactUtils.filterContacts(getActivity(), filter), filter);
+    }
+
+    private void searchMusics() {
+        Context context = getActivity();
+        if (context == null) return;
+        baseAdapter = new MusicAdapter(context, MusicUtils.filterMusics(getActivity(), filter), filter);
     }
 
     @Override

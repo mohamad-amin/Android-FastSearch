@@ -8,8 +8,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -22,6 +20,7 @@ import com.mohamadamin.fastsearch.free.fragments.HomeFragment;
 import com.mohamadamin.fastsearch.free.utils.BusinessUtils;
 import com.mohamadamin.fastsearch.free.utils.FileUtils;
 import com.mohamadamin.fastsearch.free.utils.NotificationUtils;
+import com.mohamadamin.fastsearch.free.utils.PreferenceUtils;
 import com.mohamadamin.fastsearch.free.utils.RunUtils;
 import com.mohamadamin.fastsearch.free.utils.SdkUtils;
 
@@ -34,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     View slidingPanel;
     ProgressDialog progressDialog;
 
-    TextView refreshText, emailText, instagramText;
+    TextView refreshText, notificationText, emailText, instagramText;
     TextView[] textViews;
 
     @Override
@@ -47,21 +46,27 @@ public class MainActivity extends AppCompatActivity {
         ErrorAgent.register(this, 145L);
         RunUtils.startServicesAndListeners(this);
 
+        checkNotifications();
         checkDatabases();
         initializeViews();
         handleClicks();
-        changeSizes();
         if (savedInstanceState == null) launchHome();
 
+    }
+
+    private void checkNotifications() {
+        if (PreferenceUtils.shouldShowSearchNotification(this)) NotificationUtils.showSearchNotification(this);
+        else NotificationUtils.dismissSearchNotification(this);
     }
 
     private void initializeViews() {
         slidingPanel = findViewById(R.id.main_slider);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         refreshText = (TextView) findViewById(R.id.slider_refresh);
+        notificationText = (TextView) findViewById(R.id.slider_notification);
         emailText = (TextView) findViewById(R.id.slider_email);
         instagramText = (TextView) findViewById(R.id.slider_instagram);
-        textViews = new TextView[]{refreshText, emailText, instagramText};
+        textViews = new TextView[]{refreshText, notificationText, emailText, instagramText};
     }
 
     private void handleClicks() {
@@ -70,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 switch (view.getId()) {
                     case R.id.slider_refresh : showRefreshDatabasesDialog(); break;
+                    case R.id.slider_notification : changeNotification(); break;
                     case R.id.slider_email : BusinessUtils.sendEmailToDeveloper(MainActivity.this); break;
                     case R.id.slider_instagram : BusinessUtils.launchInstagramPage(MainActivity.this); break;
                 }
@@ -78,6 +84,23 @@ public class MainActivity extends AppCompatActivity {
         };
         for (TextView textView : textViews) {
             textView.setOnClickListener(otherOnClickListener);
+        }
+        if (PreferenceUtils.shouldShowSearchNotification(this)) {
+            notificationText.setText(getString(R.string.cancel_notification));
+        } else notificationText.setText(getString(R.string.show_notification));
+    }
+
+    private void changeNotification() {
+        PreferenceUtils.setShouldShowSearchNotification(
+                this,
+                !PreferenceUtils.shouldShowSearchNotification(this)
+        );
+        if (PreferenceUtils.shouldShowSearchNotification(this)) {
+            notificationText.setText(getString(R.string.cancel_notification));
+            NotificationUtils.showSearchNotification(this);
+        } else {
+            notificationText.setText(getString(R.string.show_notification));
+            NotificationUtils.dismissSearchNotification(this);
         }
     }
 
@@ -94,22 +117,6 @@ public class MainActivity extends AppCompatActivity {
         if (drawerLayout != null) drawerLayout.closeDrawer(slidingPanel);
     }
 
-    private void changeSizes() {
-        ViewTreeObserver viewTreeObserver = slidingPanel.getViewTreeObserver();
-        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                SdkUtils.removeLayoutListener(slidingPanel, this);
-                int width = slidingPanel.getMeasuredWidth();
-                for (TextView textView : textViews) {
-                    ViewGroup.LayoutParams params = textView.getLayoutParams();
-                    params.width = width;
-                    textView.setLayoutParams(params);
-                }
-            }
-        });
-    }
-
     private void dismissProgressDialog() {
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
@@ -124,13 +131,22 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton(getString(R.string.refresh), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
                         ApplicationsDB applicationsDB = new ApplicationsDB(MainActivity.this);
                         DirectoriesDB directoriesDB = new DirectoriesDB(MainActivity.this);
                         FilesDB filesDB = new FilesDB(MainActivity.this);
+
                         applicationsDB.deleteRecords();
                         directoriesDB.deleteRecords();
                         filesDB.deleteRecords();
+
+                        applicationsDB.close();
+                        directoriesDB.close();
+                        filesDB.close();
+
+                        PreferenceUtils.setShouldWriteDatabases(MainActivity.this, true);
                         checkDatabases();
+
                     }
                 })
                 .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -144,11 +160,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkDatabases() {
 
-        final FilesDB filesDB = new FilesDB(this);
-        final ApplicationsDB applicationsDB = new ApplicationsDB(this);
-        final boolean fillFiles = filesDB.getCount()<1, fillApplications = applicationsDB.getCount()<1;
-
-        if (!fillApplications && !fillFiles) return;
+        final boolean shouldFill = PreferenceUtils.shouldWriteDatabases(this);
+        if (!shouldFill) return;
 
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
 
@@ -162,26 +175,27 @@ public class MainActivity extends AppCompatActivity {
                 progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
                 progressDialog.setIndeterminate(true);
                 progressDialog.setCancelable(false);
+                progressDialog.setProgressPercentFormat(null);
+                progressDialog.setProgressNumberFormat(null);
                 progressDialog.show();
             }
 
             @Override
             protected Void doInBackground(Void... params) {
-                if (fillFiles) {
-                    FileUtils fileUtils = new FileUtils(MainActivity.this);
-                    fileUtils.openDatabases();
-                    List<File> storage = FileUtils.getStorageFiles();
-                    for (File file : storage) {
-                        if (file != null && file.exists()) fileUtils.addFilesToDatabase(file);
-                    }
-                    fileUtils.closeDatabases();
+                FileUtils fileUtils = new FileUtils(MainActivity.this);
+                fileUtils.openDatabases();
+                List<File> storage = FileUtils.getStorageFiles();
+                for (File file : storage) {
+                    if (file != null && file.exists()) fileUtils.addFilesToDatabase(file);
                 }
-                if (fillApplications) SdkUtils.addPackagesToDatabase(MainActivity.this);
+                fileUtils.closeDatabases();
+                SdkUtils.addPackagesToDatabase(MainActivity.this);
                 return null;
             }
 
             @Override
             protected void onPostExecute(Void aVoid) {
+                PreferenceUtils.setShouldWriteDatabases(MainActivity.this, false);
                 NotificationUtils.dismissSubmitDataNotification(MainActivity.this);
                 if (MainActivity.this.isFinishing()) return;
                 dismissProgressDialog();

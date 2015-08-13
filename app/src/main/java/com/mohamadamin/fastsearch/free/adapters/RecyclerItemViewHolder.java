@@ -38,6 +38,10 @@ public class RecyclerItemViewHolder extends RecyclerView.ViewHolder {
         this.descriptionText.setText(text);
     }
 
+    public void setDescriptionText(Spannable text) {
+        this.descriptionText.setText(text);
+    }
+
     public ImageView getImageView() {
         return this.imageView;
     }

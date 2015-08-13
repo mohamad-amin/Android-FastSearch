@@ -17,7 +17,6 @@
     <dimen name="padding_small">10dp</dimen>
     <dimen name="padding_medium">15dp</dimen>
     <dimen name="padding_large">20dp</dimen>
-    <dimen name="padding_xlarge">30dp</dimen>
 
     <dimen name="notification_padding">0dp</dimen>
 

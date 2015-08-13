@@ -43,6 +43,7 @@ public class SdkUtils {
 
         db.setTransactionSuccessful();
         db.endTransaction();
+        if (db.isOpen()) db.close();
         applicationsDB.close();
 
     }

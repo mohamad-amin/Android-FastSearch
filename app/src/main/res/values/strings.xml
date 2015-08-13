@@ -9,6 +9,10 @@
     <string name="files">Files</string>
     <string name="applications">Applications</string>
     <string name="contacts">Contacts</string>
+    <string name="musics">Musics</string>
+
+    <string name="cancel_notification">Cancel Notification</string>
+    <string name="show_notification">Show Notification</string>
 
     <string name="instagram_page">Instagram Page</string>
     <string name="communication_contact_us">Email Us</string>

@@ -179,9 +179,10 @@ public class SlidingTabLayout extends HorizontalScrollView {
         textView.setAllCaps(true);
         textView.setClickable(true);
 
-
-        int padding = (int) (TAB_VIEW_PADDING_DIPS * getResources().getDisplayMetrics().density);
-        textView.setPadding(padding, padding, padding, padding);
+        int paddingSide = (int) (TAB_VIEW_PADDING_DIPS * getResources().getDisplayMetrics().density);
+        int paddingTop = (int) (8 * getResources().getDisplayMetrics().density);
+        int paddingBottom = (int) (13 * getResources().getDisplayMetrics().density);
+        textView.setPadding(paddingSide, paddingTop, paddingSide, paddingBottom);
 
         return textView;
     }
@@ -215,7 +216,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
                 lp.weight = 1;
             }
 
-            tabTitleView.setText(adapter.getPageTitle(i));
+            if (tabTitleView != null) tabTitleView.setText(adapter.getPageTitle(i));
             tabView.setOnClickListener(tabClickListener);
             String desc = mContentDescriptions.get(i, null);
             if (desc != null) {
@@ -227,8 +228,10 @@ public class SlidingTabLayout extends HorizontalScrollView {
                 tabView.setSelected(true);
             }
 
-            tabTitleView.setTextSize(14);
-            tabTitleView.setTextColor(getResources().getColorStateList(R.color.selector));
+            if (tabTitleView != null) {
+                tabTitleView.setTextSize(14);
+                tabTitleView.setTextColor(getResources().getColorStateList(R.color.selector));
+            }
         }
 
     }

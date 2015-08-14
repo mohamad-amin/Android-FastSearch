@@ -38,5 +38,9 @@
     <string name="open_folder">Open Folder</string>
     <string name="no_app_to_perform_action">No application available to open this file!</string>
     <string name="error_opening_application">Error in opening! Is this app runnable?</string>
+    <string name="add_widget">Add widget</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

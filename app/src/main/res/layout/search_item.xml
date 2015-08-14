@@ -21,7 +21,7 @@
         android:layout_toRightOf="@id/search_item_image"
         android:textColor="#333"
         android:textStyle="bold"
-        android:textSize="@dimen/abc_text_size_menu_material"
+        android:textSize="@dimen/abc_text_size_small_material"
         android:singleLine="true"
         android:layout_marginTop="@dimen/line_large" />
     
@@ -30,6 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/search_item_image"
+        android:textSize="@dimen/abc_text_size_caption_material"
         android:layout_below="@id/search_item_title"
         android:textColor="#777" />
 

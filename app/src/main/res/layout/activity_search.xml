@@ -11,29 +11,29 @@
         android:layout_height="wrap_content"
         app:elevation="5dp">
         <include
-            layout="@layout/toolbar"
-            android:id="@+id/home_toolbar"
+            layout="@layout/toolbar_search"
+            android:id="@+id/search_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|enterAlways"/>
         <com.mohamadamin.fastsearch.free.modules.SlidingTabLayout
-            android:id="@+id/home_tabs"
+            android:id="@+id/search_tabs"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:background="@color/colorPrimary"/>
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/home_pager"
+        android:id="@+id/search_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <ir.adad.AdView
-        android:id="@+id/home_ad"
+        android:id="@+id/search_ad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
-        token="01b297fb5e5346739dbce873dfd40aa6"/>
+        token="01b297fb5e5346739dbce873dfd40aa6" />
 
 </android.support.design.widget.CoordinatorLayout>

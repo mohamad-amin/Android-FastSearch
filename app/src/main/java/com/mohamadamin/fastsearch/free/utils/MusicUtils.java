@@ -16,6 +16,12 @@ public class MusicUtils {
         List<CustomMusic> list = new ArrayList<>();
         CustomMusic customMusic;
 
+        String[] projection = new String[] {
+                MediaStore.Audio.Media.TITLE,
+                MediaStore.Audio.Media.ARTIST,
+                MediaStore.Audio.Media.ALBUM,
+                MediaStore.Audio.Media.DATA
+        };
         String where = MediaStore.Audio.Media.TITLE + " LIKE ? OR " +
                 MediaStore.Audio.Media.ALBUM + " LIKE ? OR " +
                 MediaStore.Audio.Media.ARTIST + " LIKE ?";
@@ -27,7 +33,7 @@ public class MusicUtils {
 
         Cursor cursor = context.getContentResolver().query(
                 MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                null,
+                projection,
                 where,
                 params,
                 MediaStore.Audio.Media.TITLE

@@ -1,11 +1,9 @@
 package com.mohamadamin.fastsearch.free.activities;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
@@ -13,19 +11,11 @@ import android.widget.TextView;
 
 import com.dynamixsoftware.ErrorAgent;
 import com.mohamadamin.fastsearch.free.R;
-import com.mohamadamin.fastsearch.free.databases.ApplicationsDB;
-import com.mohamadamin.fastsearch.free.databases.DirectoriesDB;
-import com.mohamadamin.fastsearch.free.databases.FilesDB;
 import com.mohamadamin.fastsearch.free.fragments.HomeFragment;
 import com.mohamadamin.fastsearch.free.utils.BusinessUtils;
-import com.mohamadamin.fastsearch.free.utils.FileUtils;
 import com.mohamadamin.fastsearch.free.utils.NotificationUtils;
 import com.mohamadamin.fastsearch.free.utils.PreferenceUtils;
-import com.mohamadamin.fastsearch.free.utils.RunUtils;
 import com.mohamadamin.fastsearch.free.utils.SdkUtils;
-
-import java.io.File;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     View slidingPanel;
     ProgressDialog progressDialog;
 
-    TextView refreshText, notificationText, emailText, instagramText;
+    TextView notificationText, emailText, instagramText;
     TextView[] textViews;
 
     @Override
@@ -44,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         ErrorAgent.register(this, 145L);
-        RunUtils.startServicesAndListeners(this);
 
         checkNotifications();
         checkDatabases();
@@ -62,11 +51,10 @@ public class MainActivity extends AppCompatActivity {
     private void initializeViews() {
         slidingPanel = findViewById(R.id.main_slider);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        refreshText = (TextView) findViewById(R.id.slider_refresh);
         notificationText = (TextView) findViewById(R.id.slider_notification);
         emailText = (TextView) findViewById(R.id.slider_email);
         instagramText = (TextView) findViewById(R.id.slider_instagram);
-        textViews = new TextView[]{refreshText, notificationText, emailText, instagramText};
+        textViews = new TextView[]{notificationText, emailText, instagramText};
     }
 
     private void handleClicks() {
@@ -74,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 switch (view.getId()) {
-                    case R.id.slider_refresh : showRefreshDatabasesDialog(); break;
                     case R.id.slider_notification : changeNotification(); break;
                     case R.id.slider_email : BusinessUtils.sendEmailToDeveloper(MainActivity.this); break;
                     case R.id.slider_instagram : BusinessUtils.launchInstagramPage(MainActivity.this); break;
@@ -124,40 +111,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void showRefreshDatabasesDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.refresh_databases))
-                .setMessage(getString(R.string.refresh_databases_description))
-                .setPositiveButton(getString(R.string.refresh), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        ApplicationsDB applicationsDB = new ApplicationsDB(MainActivity.this);
-                        DirectoriesDB directoriesDB = new DirectoriesDB(MainActivity.this);
-                        FilesDB filesDB = new FilesDB(MainActivity.this);
-
-                        applicationsDB.deleteRecords();
-                        directoriesDB.deleteRecords();
-                        filesDB.deleteRecords();
-
-                        applicationsDB.close();
-                        directoriesDB.close();
-                        filesDB.close();
-
-                        PreferenceUtils.setShouldWriteDatabases(MainActivity.this, true);
-                        checkDatabases();
-
-                    }
-                })
-                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        builder.create().show();
-    }
-
     private void checkDatabases() {
 
         final boolean shouldFill = PreferenceUtils.shouldWriteDatabases(this);
@@ -182,13 +135,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             protected Void doInBackground(Void... params) {
-                FileUtils fileUtils = new FileUtils(MainActivity.this);
-                fileUtils.openDatabases();
-                List<File> storage = FileUtils.getStorageFiles();
-                for (File file : storage) {
-                    if (file != null && file.exists()) fileUtils.addFilesToDatabase(file);
-                }
-                fileUtils.closeDatabases();
                 SdkUtils.addPackagesToDatabase(MainActivity.this);
                 return null;
             }

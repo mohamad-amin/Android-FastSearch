@@ -17,9 +17,16 @@ public class ContactUtils {
         List<CustomContact> list = new ArrayList<>();
         ContentResolver contentResolver = context.getContentResolver();
         CustomContact customContact;
-        String selection = ContactsContract.Contacts.DISPLAY_NAME + " LIKE '%" + filter + "%'";
+
+        String selection = ContactsContract.Contacts.DISPLAY_NAME + " LIKE ?";
+        String[] selectionArgs = new String[]{"%"+filter+"%"};
+
         Cursor cursor = contentResolver.query(
-                ContactsContract.Contacts.CONTENT_URI, null, selection, null, null);
+                ContactsContract.Contacts.CONTENT_URI,
+                null,
+                selection,
+                selectionArgs,
+                null);
 
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -42,7 +49,6 @@ public class ContactUtils {
         }
 
         cursor.close();
-
         return list;
 
     }

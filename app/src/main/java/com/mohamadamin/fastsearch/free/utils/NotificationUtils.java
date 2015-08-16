@@ -8,15 +8,15 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
 import com.mohamadamin.fastsearch.free.R;
-import com.mohamadamin.fastsearch.free.activities.MainActivity;
+import com.mohamadamin.fastsearch.free.activities.SearchActivity;
 
 public class NotificationUtils {
 
     public static void showSearchNotification(Context context) {
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addParentStack(MainActivity.class);
-        stackBuilder.addNextIntent(new Intent(context, MainActivity.class));
+        stackBuilder.addParentStack(SearchActivity.class);
+        stackBuilder.addNextIntent(new Intent(context, SearchActivity.class));
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context);

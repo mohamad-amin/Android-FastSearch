@@ -1,12 +1,10 @@
 package com.mohamadamin.fastsearch.free.utils;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteStatement;
+import android.database.Cursor;
+import android.provider.MediaStore;
 import android.webkit.MimeTypeMap;
 
-import com.mohamadamin.fastsearch.free.databases.DirectoriesDB;
-import com.mohamadamin.fastsearch.free.databases.FilesDB;
 import com.mohamadamin.fastsearch.free.modules.CustomFile;
 
 import java.io.File;
@@ -15,35 +13,10 @@ import java.util.List;
 
 public class FileUtils {
 
-    SQLiteStatement filesStatement, directoriesStatement;
-    SQLiteDatabase filesDatabase, directoriesDatabase;
-    FilesDB filesDB;
-    DirectoriesDB directoriesDB;
     Context context;
-    String fileName, fileParent;
 
     public FileUtils(Context context) {
         this.context = context;
-    }
-
-    public void openDatabases() {
-        filesDB = new FilesDB(context);
-        directoriesDB = new DirectoriesDB(context);
-        filesDatabase = filesDB.getWritableDatabase();
-        directoriesDatabase = directoriesDB.getWritableDatabase();
-        filesDatabase.beginTransaction();
-        directoriesDatabase.beginTransaction();
-        filesStatement = filesDatabase.compileStatement(filesDB.getInsertSql());
-        directoriesStatement = directoriesDatabase.compileStatement(directoriesDB.getInsertSql());
-    }
-
-    public void closeDatabases() {
-        filesDatabase.setTransactionSuccessful();
-        directoriesDatabase.setTransactionSuccessful();
-        filesDatabase.endTransaction();
-        directoriesDatabase.endTransaction();
-        filesDB.close();
-        directoriesDB.close();
     }
 
     public static String getExtensionFromFilePath(String fullPath) {
@@ -51,54 +24,17 @@ public class FileUtils {
         return filenameArray[filenameArray.length-1];
     }
 
+    public static String getFileName(String fullPath) {
+        return fullPath.substring(fullPath.lastIndexOf(File.separator) + 1);
+    }
+
+    public static String getFileParent(String fullPath) {
+        return fullPath.substring(0, fullPath.lastIndexOf(File.separator));
+    }
+
     public static String getMimeTypeFromFilePath(String filePath) {
         String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(getExtensionFromFilePath(filePath));
         return (mimeType == null) ? "*/*" : mimeType;
-    }
-
-    public static List<File> getStorageFiles() {
-        List<File> files = new ArrayList<>();
-        files.add(new File(System.getenv("EXTERNAL_STORAGE")));
-        try {
-            for (String path : System.getenv("SECONDARY_STORAGE").split(":")) {
-                File file = new File(path);
-                if (file.exists()) files.add(file);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return files;
-    }
-
-    public void addFilesToDatabase(File directory) {
-
-        File[] chileFiles = directory.listFiles();
-
-        if (chileFiles != null) {
-            for(File file : chileFiles) {
-                if (file.isDirectory()) {
-                    if (!file.getAbsolutePath().contains("/Android/data") && !file.getAbsolutePath().contains("/Android/obb")) {
-                        fileName = file.getName();
-                        fileParent = file.getParent()+"/";
-                        directoriesStatement.bindString(1, fileName);
-                        directoriesStatement.bindString(2, fileParent);
-                        directoriesStatement.bindString(3, fileParent + fileName);
-                        directoriesStatement.executeInsert();
-                        directoriesStatement.clearBindings();
-                        addFilesToDatabase(file);
-                    }
-                } else {
-                    fileName = file.getName();
-                    fileParent = file.getParent()+"/";
-                    filesStatement.bindString(1, fileName);
-                    filesStatement.bindString(2, fileParent);
-                    filesStatement.bindString(3, fileParent + fileName);
-                    filesStatement.executeInsert();
-                    filesStatement.clearBindings();
-                }
-            }
-        }
-
     }
 
     public static void deleteFile(CustomFile customFile) {
@@ -115,6 +51,41 @@ public class FileUtils {
             file.renameTo(to);
         }
         oldFile.name = newName;
+    }
+
+    public static List<CustomFile> filterFiles(Context context, String filter) {
+
+        List<CustomFile> list = new ArrayList<>();
+        CustomFile customFile;
+        String path;
+
+        String nonMediaCondition = MediaStore.Files.FileColumns.MEDIA_TYPE + "="
+                + MediaStore.Files.FileColumns.MEDIA_TYPE_NONE;
+        String where = nonMediaCondition + " AND " + MediaStore.Files.FileColumns.TITLE + " LIKE ?";
+        String[] params = new String[] {"%"+filter+"%"};
+
+        Cursor cursor = context.getContentResolver().query(
+                MediaStore.Files.getContentUri("external"),
+                new String[]{MediaStore.Files.FileColumns.DATA},
+                where,
+                params,
+                null
+        );
+
+        while (cursor.moveToNext()) {
+            path = cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA));
+            if (path != null) {
+                customFile = new CustomFile();
+                customFile.fullPath = path;
+                customFile.name = getFileName(path);
+                customFile.directory = getFileParent(path);
+                list.add(customFile);
+            }
+        }
+
+        cursor.close();
+        return list;
+
     }
 
 }

@@ -7,7 +7,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="@dimen/padding_small"
-    android:paddingBottom="1dp"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
     app:contentInsetEnd="@dimen/padding_small"
     app:contentInsetStart="@dimen/padding_small">

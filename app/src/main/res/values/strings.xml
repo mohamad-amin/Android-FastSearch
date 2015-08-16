@@ -10,6 +10,8 @@
     <string name="applications">Applications</string>
     <string name="contacts">Contacts</string>
     <string name="musics">Musics</string>
+    <string name="photos">Photos</string>
+    <string name="videos">Videos</string>
 
     <string name="cancel_notification">Cancel Notification</string>
     <string name="show_notification">Show Notification</string>
@@ -20,8 +22,6 @@
     <string name="communication_send_email">Sending Email</string>
     <string name="communication_send_mail_no_application">No application available for this action!</string>
 
-    <string name="refresh_databases">Update Data</string>
-    <string name="refresh_databases_description">With updating data all the files on SD Card and internal storage checked again and all the files will be resubmitted to application\'s database so that your newly-created files will be shown in your search results.</string>
     <string name="submit_data_title">Submit Data</string>
     <string name="submit_data_description">The application is now submitting your files in its local database to make searching the faster. This process may last a few minutes. Please during this period don\'t exit the Fast Search (or at least don\'t kill it) and wait. Otherwise the application may missperform! It\'s clear that the more the files are on your device the more the this process takes time. Thanks for your patience.</string>
     <string name="submit_data_notification">Submitting Data...</string>

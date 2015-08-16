@@ -33,22 +33,6 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/slider_refresh"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:textColor="@color/primary_text_default_material_light"
-                android:drawablePadding="@dimen/padding_xlarge"
-                android:textSize="@dimen/abc_text_size_small_material"
-                android:drawableLeft="@drawable/ic_action_refresh"
-                android:text="@string/refresh_databases"
-                android:paddingLeft="@dimen/padding_large"
-                android:paddingRight="@dimen/padding_large"
-                android:paddingTop="@dimen/padding_small"
-                android:paddingBottom="@dimen/padding_small"
-                android:background="?selectableItemBackground" />
-
-            <TextView
                 android:id="@+id/slider_notification"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

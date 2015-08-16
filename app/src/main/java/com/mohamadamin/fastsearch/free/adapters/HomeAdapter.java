@@ -18,10 +18,12 @@ public class HomeAdapter extends FragmentStatePagerAdapter {
         super(fragmentManager);
         this.filter = filter;
         this.titles = new String[] {
-                resources.getString(R.string.files),
                 resources.getString(R.string.applications),
                 resources.getString(R.string.contacts),
-                resources.getString(R.string.musics)
+                resources.getString(R.string.files),
+                resources.getString(R.string.musics),
+                resources.getString(R.string.photos),
+                resources.getString(R.string.videos)
         };
         this.searchFragments = new SearchFragment[titles.length];
         for (int i=0; i<searchFragments.length; i++) {

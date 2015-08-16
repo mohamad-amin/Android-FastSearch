@@ -40,8 +40,8 @@
         android:layout_centerInParent="true"
         android:id="@+id/search_nothing_found">
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:src="@drawable/homer" />
         <TextView
             android:textStyle="bold"
@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/nothing_found"
-            android:textSize="@dimen/abc_text_size_headline_material"/>
+            android:textSize="@dimen/abc_text_size_large_material"/>
     </LinearLayout>
 
     <LinearLayout

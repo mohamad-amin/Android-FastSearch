@@ -60,12 +60,6 @@ public class ApplicationsDB extends SQLiteOpenHelper {
 		db.insert(TABLE_NAME, null, values);
 	}
 
-	public void deleteRecords() {
-		if (db == null) db = getWritableDatabase();
-		db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-		onCreate(db);
-	}
-
 	public List<CustomApplication> filterApplications(String filter) {
 
 		if (db == null) db = getWritableDatabase();

@@ -94,7 +94,6 @@ public class HomeFragment extends Fragment implements
                 return getResources().getColor(android.R.color.white);
             }
         });
-        slidingTabLayout.setDistributeEvenly(true);
         slidingTabLayout.setViewPager(viewPager);
     }
 

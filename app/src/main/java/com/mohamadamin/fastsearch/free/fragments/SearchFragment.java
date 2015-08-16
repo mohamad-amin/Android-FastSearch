@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,23 +20,20 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.mohamadamin.fastsearch.free.R;
-import com.mohamadamin.fastsearch.free.activities.MainActivity;
 import com.mohamadamin.fastsearch.free.adapters.ApplicationAdapter;
 import com.mohamadamin.fastsearch.free.adapters.ContactAdapter;
 import com.mohamadamin.fastsearch.free.adapters.FileAdapter;
+import com.mohamadamin.fastsearch.free.adapters.ImageAdapter;
 import com.mohamadamin.fastsearch.free.adapters.MusicAdapter;
+import com.mohamadamin.fastsearch.free.adapters.VideoAdapter;
 import com.mohamadamin.fastsearch.free.databases.ApplicationsDB;
-import com.mohamadamin.fastsearch.free.databases.DirectoriesDB;
-import com.mohamadamin.fastsearch.free.databases.FilesDB;
-import com.mohamadamin.fastsearch.free.modules.CustomFile;
 import com.mohamadamin.fastsearch.free.utils.ContactUtils;
+import com.mohamadamin.fastsearch.free.utils.FileUtils;
+import com.mohamadamin.fastsearch.free.utils.ImageUtils;
 import com.mohamadamin.fastsearch.free.utils.Interfaces;
 import com.mohamadamin.fastsearch.free.utils.MusicUtils;
 import com.mohamadamin.fastsearch.free.utils.SdkUtils;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import com.mohamadamin.fastsearch.free.utils.VideoUtils;
 
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 import xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller;
@@ -43,6 +41,7 @@ import xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScrol
 public class SearchFragment extends Fragment implements Interfaces.OnFilePressedListener {
 
     public static final String POSITION="position", FILTER="filter";
+    private final int APPLICATIONS = 0, CONTACTS = 1, FILES = 2, MUSICS = 3, PHOTOS = 4, VIDEOS = 5;
     int position;
     String filter;
 
@@ -57,8 +56,6 @@ public class SearchFragment extends Fragment implements Interfaces.OnFilePressed
     RecyclerView.Adapter baseAdapter;
     VerticalRecyclerViewFastScroller fastScroller;
 
-    FilesDB filesDB;
-    DirectoriesDB directoriesDB;
     ApplicationsDB applicationsDB;
 
     public static SearchFragment newInstance(int position, String filter) {
@@ -75,8 +72,6 @@ public class SearchFragment extends Fragment implements Interfaces.OnFilePressed
         super.onCreate(savedInstanceState);
         position = getArguments().getInt(POSITION);
         filter = getArguments().getString(FILTER);
-        filesDB = new FilesDB(getActivity());
-        directoriesDB = new DirectoriesDB(getActivity());
         applicationsDB = new ApplicationsDB(getActivity());
     }
 
@@ -134,10 +129,12 @@ public class SearchFragment extends Fragment implements Interfaces.OnFilePressed
                 @Override
                 protected Void doInBackground(Void... params) {
                     switch (position) {
-                        case 0 : searchFiles(); break;
-                        case 1 : searchApplications(); break;
-                        case 2 : searchContacts(); break;
-                        case 3 : searchMusics(); break;
+                        case APPLICATIONS : searchApplications(); break;
+                        case CONTACTS : searchContacts(); break;
+                        case FILES : searchFiles(); break;
+                        case MUSICS : searchMusics(); break;
+                        case PHOTOS : searchPhotos(); break;
+                        case VIDEOS : searchVideos(); break;
                         default: break;
                     }
                     return null;
@@ -169,8 +166,6 @@ public class SearchFragment extends Fragment implements Interfaces.OnFilePressed
     }
 
     private void closeDatabases() {
-        filesDB.close();
-        directoriesDB.close();
         applicationsDB.close();
     }
 
@@ -181,10 +176,7 @@ public class SearchFragment extends Fragment implements Interfaces.OnFilePressed
     private void searchFiles() {
         Context context = getActivity();
         if (context == null) return;
-        List<CustomFile> customFiles = directoriesDB.getFiles(filter);
-        customFiles.addAll(filesDB.getFiles(filter));
-        Collections.shuffle(customFiles, new Random(System.nanoTime()));
-        baseAdapter = new FileAdapter(context, mainLayout, customFiles, filter, this);
+        baseAdapter = new FileAdapter(context, mainLayout, FileUtils.filterFiles(context, filter), filter, this);
     }
 
     private void searchApplications() {
@@ -205,10 +197,24 @@ public class SearchFragment extends Fragment implements Interfaces.OnFilePressed
         baseAdapter = new MusicAdapter(context, MusicUtils.filterMusics(getActivity(), filter), filter);
     }
 
+    private void searchPhotos() {
+        Context context = getActivity();
+        if (context == null) return;
+        baseAdapter = new ImageAdapter(context, ImageUtils.filterImages(getActivity(), filter), filter);
+    }
+
+
+    private void searchVideos() {
+        Context context = getActivity();
+        if (context == null) return;
+        baseAdapter = new VideoAdapter(context, VideoUtils.filterVideos(getActivity(), filter), filter);
+    }
+
+
     @Override
     public void onFilePressed(final String fileName, final int position) {
         if (actionMode != null) actionMode.finish();
-        actionMode = ((MainActivity)getActivity()).startSupportActionMode(new ActionMode.Callback() {
+        actionMode = ((AppCompatActivity)getActivity()).startSupportActionMode(new ActionMode.Callback() {
 
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {

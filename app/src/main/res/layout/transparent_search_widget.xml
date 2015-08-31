@@ -1,0 +1,44 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageButton
+        android:clickable="true"
+        android:id="@+id/search_launch"
+        android:layout_width="@dimen/abc_action_button_min_width_material"
+        android:layout_height="@dimen/abc_action_button_min_width_material"
+        android:src="@drawable/ic_action_launch_white"
+        android:background="@drawable/default_clickable_background"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/app_name" />
+
+    <ImageButton
+        android:clickable="true"
+        android:id="@+id/search_search"
+        android:layout_width="@dimen/abc_action_button_min_width_material"
+        android:layout_height="@dimen/abc_action_button_min_width_material"
+        android:src="@drawable/ic_action_fast_search_white"
+        android:background="@drawable/default_clickable_background"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/app_name"/>
+
+    <TextView
+        android:clickable="true"
+        android:background="@drawable/default_clickable_background"
+        android:id="@+id/search_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textSize="18sp"
+        android:paddingBottom="@dimen/padding_small"
+        android:paddingTop="@dimen/padding_small"
+        android:paddingLeft="@dimen/padding_medium"
+        android:textColor="@android:color/white"
+        android:layout_toRightOf="@id/search_search"
+        android:layout_toLeftOf="@id/search_launch"
+        android:layout_centerVertical="true" />
+
+</RelativeLayout>

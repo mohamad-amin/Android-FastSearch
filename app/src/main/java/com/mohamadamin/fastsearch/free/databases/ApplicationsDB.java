@@ -19,7 +19,7 @@ public class ApplicationsDB extends SQLiteOpenHelper {
 	SQLiteDatabase db;
 
 	final static int DATABASE_VERSION = 10;
-	final static String DATABASE_NAME = "Applications.db",
+	public final static String DATABASE_NAME = "Applications.db",
 			TABLE_NAME = "AllApps",
 			COLUMN_NAME = "Name",
 			COLUMN_PACKAGE = "Package";
@@ -83,6 +83,13 @@ public class ApplicationsDB extends SQLiteOpenHelper {
 		cursor.close();
 		return customApplications;
 
+	}
+
+	public Cursor getFilteredCursor(String filter) {
+		if (db == null) db = getWritableDatabase();
+		String query = "SELECT * FROM " + TABLE_NAME + " WHERE " +
+				COLUMN_NAME + " LIKE '%" + filter + "%'";
+		return db.rawQuery(query, null);
 	}
 
 	public void removeApplication(String packageName) {

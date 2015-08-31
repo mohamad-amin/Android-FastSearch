@@ -1,8 +1,6 @@
 package com.mohamadamin.fastsearch.free.fragments;
 
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.os.AsyncTask;
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -21,19 +19,14 @@ import android.widget.LinearLayout;
 
 import com.mohamadamin.fastsearch.free.R;
 import com.mohamadamin.fastsearch.free.adapters.ApplicationAdapter;
+import com.mohamadamin.fastsearch.free.adapters.BaseActionModeAdapter;
 import com.mohamadamin.fastsearch.free.adapters.ContactAdapter;
 import com.mohamadamin.fastsearch.free.adapters.FileAdapter;
 import com.mohamadamin.fastsearch.free.adapters.ImageAdapter;
 import com.mohamadamin.fastsearch.free.adapters.MusicAdapter;
 import com.mohamadamin.fastsearch.free.adapters.VideoAdapter;
 import com.mohamadamin.fastsearch.free.databases.ApplicationsDB;
-import com.mohamadamin.fastsearch.free.utils.ContactUtils;
-import com.mohamadamin.fastsearch.free.utils.FileUtils;
-import com.mohamadamin.fastsearch.free.utils.ImageUtils;
 import com.mohamadamin.fastsearch.free.utils.Interfaces;
-import com.mohamadamin.fastsearch.free.utils.MusicUtils;
-import com.mohamadamin.fastsearch.free.utils.SdkUtils;
-import com.mohamadamin.fastsearch.free.utils.VideoUtils;
 
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 import xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller;
@@ -41,7 +34,7 @@ import xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScrol
 public class SearchFragment extends Fragment implements Interfaces.OnFilePressedListener {
 
     public static final String POSITION="position", FILTER="filter";
-    private final int APPLICATIONS = 0, CONTACTS = 1, FILES = 2, MUSICS = 3, PHOTOS = 4, VIDEOS = 5;
+    public final int APPLICATIONS = 0, CONTACTS = 1, FILES = 2, MUSICS = 3, PHOTOS = 4, VIDEOS = 5;
     int position;
     String filter;
 
@@ -49,7 +42,6 @@ public class SearchFragment extends Fragment implements Interfaces.OnFilePressed
     CardView cardView;
     LinearLayout searchFirstLayout, nothingFoundLayout;
 
-    ProgressDialog progressDialog;
     ActionMode actionMode;
 
     RecyclerView searchResultList;
@@ -112,107 +104,79 @@ public class SearchFragment extends Fragment implements Interfaces.OnFilePressed
             nothingFoundLayout.setVisibility(View.GONE);
             searchFirstLayout.setVisibility(View.VISIBLE);
         } else {
+
             searchFirstLayout.setVisibility(View.GONE);
-            AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
 
-                @Override
-                protected void onPreExecute() {
-                    super.onPreExecute();
-                    progressDialog = ProgressDialog.show(
-                            getActivity(),
-                            null,
-                            getString(R.string.please_wait)
-                    );
-                    progressDialog.setCancelable(false);
-                }
+            switch (position) {
+                case APPLICATIONS : searchApplications(); break;
+                case CONTACTS : searchContacts(); break;
+                case FILES : searchFiles(); break;
+                case MUSICS : searchMusics(); break;
+                case PHOTOS : searchPhotos(); break;
+                case VIDEOS : searchVideos(); break;
+                default: break;
+            }
 
-                @Override
-                protected Void doInBackground(Void... params) {
-                    switch (position) {
-                        case APPLICATIONS : searchApplications(); break;
-                        case CONTACTS : searchContacts(); break;
-                        case FILES : searchFiles(); break;
-                        case MUSICS : searchMusics(); break;
-                        case PHOTOS : searchPhotos(); break;
-                        case VIDEOS : searchVideos(); break;
-                        default: break;
-                    }
-                    return null;
-                }
+            closeDatabases();
 
-                @Override
-                protected void onPostExecute(Void aVoid) {
-                    closeDatabases();
-                    if (getActivity() == null) return;
-                    else if (getActivity().isFinishing()) return;
-                    dismissProgressDialog();
-                    if (baseAdapter != null && baseAdapter.getItemCount() > 0) {
-                        cardView.setVisibility(View.VISIBLE);
-                        nothingFoundLayout.setVisibility(View.GONE);
-                        searchResultList.setAdapter(baseAdapter);
-                    } else {
-                        cardView.setVisibility(View.GONE);
-                        nothingFoundLayout.setVisibility(View.VISIBLE);
-                    }
-                }
-
-            };
-
-            if (SdkUtils.isHoneycombOrHigher()) task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            else task.execute();
+            if (baseAdapter != null) {
+                cardView.setVisibility(View.VISIBLE);
+                nothingFoundLayout.setVisibility(View.GONE);
+                searchResultList.setAdapter(baseAdapter);
+            } else showNothingFoundLayout();
 
         }
 
+    }
+
+    public void showNothingFoundLayout() {
+        cardView.setVisibility(View.GONE);
+        nothingFoundLayout.setVisibility(View.VISIBLE);
     }
 
     private void closeDatabases() {
         applicationsDB.close();
     }
 
-    private void dismissProgressDialog() {
-        if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
-    }
-
     private void searchFiles() {
-        Context context = getActivity();
+        Activity context = getActivity();
         if (context == null) return;
-        baseAdapter = new FileAdapter(context, mainLayout, FileUtils.filterFiles(context, filter), filter, this);
+        baseAdapter = new FileAdapter(this, context, mainLayout, filter, this);
     }
 
     private void searchApplications() {
-        Context context = getActivity();
+        Activity context = getActivity();
         if (context == null) return;
-        baseAdapter = new ApplicationAdapter(context, applicationsDB.filterApplications(filter), filter);
+        baseAdapter = new ApplicationAdapter(this, context, filter);
     }
 
     private void searchContacts() {
-        Context context = getActivity();
+        Activity context = getActivity();
         if (context == null) return;
-        baseAdapter = new ContactAdapter(context, ContactUtils.filterContacts(getActivity(), filter), filter);
+        baseAdapter = new ContactAdapter(this, context, filter);
     }
 
     private void searchMusics() {
-        Context context = getActivity();
+        Activity context = getActivity();
         if (context == null) return;
-        baseAdapter = new MusicAdapter(context, MusicUtils.filterMusics(getActivity(), filter), filter);
+        baseAdapter = new MusicAdapter(this, context, mainLayout, filter, this);
     }
 
     private void searchPhotos() {
-        Context context = getActivity();
+        Activity context = getActivity();
         if (context == null) return;
-        baseAdapter = new ImageAdapter(context, ImageUtils.filterImages(getActivity(), filter), filter);
+        baseAdapter = new ImageAdapter(this, context, mainLayout, filter, this);
     }
-
 
     private void searchVideos() {
-        Context context = getActivity();
+        Activity context = getActivity();
         if (context == null) return;
-        baseAdapter = new VideoAdapter(context, VideoUtils.filterVideos(getActivity(), filter), filter);
+        baseAdapter = new VideoAdapter(this, context, mainLayout, filter, this);
     }
-
 
     @Override
     public void onFilePressed(final String fileName, final int position) {
+        final BaseActionModeAdapter adapter = (BaseActionModeAdapter) baseAdapter;
         if (actionMode != null) actionMode.finish();
         actionMode = ((AppCompatActivity)getActivity()).startSupportActionMode(new ActionMode.Callback() {
 
@@ -230,7 +194,7 @@ public class SearchFragment extends Fragment implements Interfaces.OnFilePressed
                         mode.setTitle(fileName);
                     }
                 }, 150);
-                ((FileAdapter)baseAdapter).selectItem(position);
+                adapter.selectItem(position);
                 return false;
             }
 
@@ -238,14 +202,14 @@ public class SearchFragment extends Fragment implements Interfaces.OnFilePressed
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_mode_rename: {
-                        ((FileAdapter)baseAdapter).clearSelections();
-                        ((FileAdapter)baseAdapter).renameFile(position);
+                        adapter.clearSelections();
+                        adapter.renameFile(position);
                         mode.finish();
                         return true;
                     }
                     case R.id.action_mode_delete: {
-                        ((FileAdapter)baseAdapter).clearSelections();
-                        ((FileAdapter)baseAdapter).removeFile(position);
+                        adapter.clearSelections();
+                        adapter.removeFile(position);
                         mode.finish();
                         return true;
                     }
@@ -256,17 +220,11 @@ public class SearchFragment extends Fragment implements Interfaces.OnFilePressed
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
-                ((FileAdapter)baseAdapter).clearSelections();
+                adapter.clearSelections();
             }
 
         });
 
-    }
-
-    @Override
-    public void onDestroy() {
-        dismissProgressDialog();
-        super.onDestroy();
     }
 
 }

@@ -2,7 +2,9 @@ package com.mohamadamin.fastsearch.free.adapters;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.content.Context;
+import android.app.Activity;
+import android.database.Cursor;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -13,8 +15,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.mohamadamin.fastsearch.free.R;
+import com.mohamadamin.fastsearch.free.databases.ApplicationsDB;
+import com.mohamadamin.fastsearch.free.fragments.SearchFragment;
 import com.mohamadamin.fastsearch.free.modules.CustomApplication;
 import com.mohamadamin.fastsearch.free.utils.PicassoUtils;
+import com.mohamadamin.fastsearch.free.utils.SdkUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -23,17 +28,20 @@ import java.util.List;
 public class ApplicationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements
         View.OnClickListener {
 
-    Context context;
+    Activity context;
     List<CustomApplication> list;
     Picasso picasso;
     String filter;
+    SearchFragment searchFragment;
 
     int lastPosition = -1;
 
-    public ApplicationAdapter(Context context, List<CustomApplication> list, String filter) {
-        this.list = list;
+    public ApplicationAdapter(SearchFragment searchFragment, Activity context, String filter) {
+        this.searchFragment = searchFragment;
         this.filter = filter;
         this.context = context;
+        if (SdkUtils.isHoneycombOrHigher()) new ApplicationLoaderTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        else new ApplicationLoaderTask().execute();
         initializePicasso();
     }
 
@@ -122,6 +130,55 @@ public class ApplicationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             Toast.makeText(context, context.getResources().getString(R.string.error_opening_application)
                     , Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void add(CustomApplication customApplication) {
+        list.add(customApplication);
+        notifyItemInserted(getItemCount());
+    }
+
+    private class ApplicationLoaderTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            filterApplications();
+            return null;
+        }
+    }
+
+    private void filterApplications() {
+
+        list = new ArrayList<>();
+        ApplicationsDB applicationsDB = new ApplicationsDB(context);
+        Cursor cursor = applicationsDB.getFilteredCursor(filter);
+
+        if (cursor.getCount() == 0) {
+            if (searchFragment!=null && context!=null) {
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        searchFragment.showNothingFoundLayout();
+                    }
+                });
+            }
+            return;
+        }
+
+        while (cursor.moveToNext()) {
+            final CustomApplication customApplication = new CustomApplication();
+            customApplication.titleText = cursor.getString(cursor.getColumnIndex(ApplicationsDB.COLUMN_NAME));
+            customApplication.packageName = cursor.getString(cursor.getColumnIndex(ApplicationsDB.COLUMN_PACKAGE));
+            if (context != null) {
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        add(customApplication);
+                    }
+                });
+            }
+        }
+
+        cursor.close();
+
     }
 
 }

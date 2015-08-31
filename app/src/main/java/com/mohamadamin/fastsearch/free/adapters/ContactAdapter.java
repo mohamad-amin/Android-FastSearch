@@ -2,9 +2,12 @@ package com.mohamadamin.fastsearch.free.adapters;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.content.Context;
+import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.ContactsContract;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -16,8 +19,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mohamadamin.fastsearch.free.R;
+import com.mohamadamin.fastsearch.free.fragments.SearchFragment;
 import com.mohamadamin.fastsearch.free.modules.CustomContact;
 import com.mohamadamin.fastsearch.free.utils.PicassoUtils;
+import com.mohamadamin.fastsearch.free.utils.SdkUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -26,17 +31,20 @@ import java.util.List;
 public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements
         View.OnClickListener {
 
-    Context context;
+    Activity context;
     List<CustomContact> list;
     Picasso picasso;
     String filter;
+    SearchFragment searchFragment;
 
     int lastPosition = -1;
 
-    public ContactAdapter(Context context, List<CustomContact> list, String filter) {
-        this.list = list;
+    public ContactAdapter(SearchFragment searchFragment, Activity context, String filter) {
+        this.searchFragment = searchFragment;
         this.filter = filter;
         this.context = context;
+        if (SdkUtils.isHoneycombOrHigher()) new ContactLoaderTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        else new ContactLoaderTask().execute();
         initializePicasso();
     }
 
@@ -122,6 +130,77 @@ public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         intent.setData(Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI,
                 list.get((Integer) view.getTag()).idString));
         context.startActivity(intent);
+    }
+
+    public void add(CustomContact customContact) {
+        list.add(customContact);
+        notifyItemInserted(getItemCount());
+    }
+
+    private class ContactLoaderTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            filterContacts();
+            return null;
+        }
+    }
+
+    private void filterContacts() {
+
+        list = new ArrayList<>();
+
+        ContentResolver contentResolver = context.getContentResolver();
+        String selection = ContactsContract.Contacts.DISPLAY_NAME + " LIKE ?";
+        String[] selectionArgs = new String[]{"%"+filter+"%"};
+
+        Cursor cursor = contentResolver.query(
+                ContactsContract.Contacts.CONTENT_URI,
+                null,
+                selection,
+                selectionArgs,
+                null);
+
+        if (cursor.getCount() == 0) {
+            if (searchFragment!=null && context!=null) {
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        searchFragment.showNothingFoundLayout();
+                    }
+                });
+            }
+            return;
+        }
+
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                final CustomContact customContact = new CustomContact();
+                customContact.idString = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                customContact.name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                customContact.uri = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI));
+                if (Integer.parseInt(cursor.getString(
+                        cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+                    Cursor phones = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                            new String[] {customContact.idString}, null);
+                    phones.moveToNext();
+                    customContact.phone = phones.getString(phones.getColumnIndex(
+                            ContactsContract.CommonDataKinds.Phone.NUMBER));
+                    phones.close();
+                }
+                if (context != null) {
+                    context.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            add(customContact);
+                        }
+                    });
+                }
+            }
+        }
+
+        cursor.close();
+
     }
 
 }

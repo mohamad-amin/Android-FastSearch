@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.dynamixsoftware.ErrorAgent;
 import com.mohamadamin.fastsearch.free.R;
 import com.mohamadamin.fastsearch.free.adapters.HomeAdapter;
 import com.mohamadamin.fastsearch.free.fragments.SearchFragment;
@@ -38,6 +39,7 @@ public class SearchActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        ErrorAgent.register(this, 145L);
 
         if (savedInstanceState != null) {
             this.filter = savedInstanceState.getString(SearchFragment.FILTER);
